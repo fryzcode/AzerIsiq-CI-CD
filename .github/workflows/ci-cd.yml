@@ -3,7 +3,7 @@ name: ASP.NET Core CI/CD
 on:
   push:
     branches:
-      - main  # или другая ветка, на которую пушишь измененияя
+      - main  # или другая ветка, на которую пушишь изменения
 
 jobs:
   build:
@@ -14,7 +14,7 @@ jobs:
         image: mcr.microsoft.com/mssql/server:2022-latest
         options: >-
           --env ACCEPT_EULA=Y
-          --env SA_PASSWORD=${{ secrets.MSSQL_PASSWORD }}
+          --env SA_PASSWORD=${{ secrets.MSSQL_PASSWORD }}  # Используем секрет из GitHub для пароля
           --health-cmd="exit 0"
           --health-interval=5s
           --health-timeout=1s
@@ -30,15 +30,15 @@ jobs:
 
       - name: Build and run containers
         run: |
-          docker-compose -f docker-compose.yml up --build -d
+          docker-compose -f docker-compose.yml -f docker-compose.override.yml up --build -d  # Используем оба файла для сборки
 
       - name: Wait for SQL Server to start
         run: |
-          sleep 30  # подожди 30 секунд, чтобы MSSQL запустился (по желанию можно использовать проверку на статус)
+          sleep 30  # Подожди 30 секунд, чтобы MSSQL запустился
 
       - name: Run unit tests
         run: |
-          docker exec -t azerisiq.api-1 dotnet test  # Запуск юнит-тестов в контейнере
+          docker exec -t azerisiq.api dotnet test  # Запуск юнит-тестов в контейнере
 
       - name: Push Docker images to registry (если нужно)
         run: |
@@ -47,5 +47,5 @@ jobs:
 
       - name: Deploy to production (если нужно)
         run: |
-          # Тут можно добавить команду для деплоя на сервер или в облако, например:
+          # Команды для деплоя, например:
           # docker-compose -f docker-compose.prod.yml up -d
