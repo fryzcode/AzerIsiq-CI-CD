@@ -46,8 +46,11 @@ jobs:
         run: |
           docker-compose -f docker-compose.yml -f docker-compose.override.yml up --build -d 
 
-      - name: Check container logs
-        run: docker ps -a && docker logs azerisiq.api || true
+      - name: Azerisiq.api logs
+        run: docker ps -a && docker logs azerisiq-ci-cd_azerisiq.api || true
+
+      - name: MsSql logs
+        run: docker ps -a && docker logs azerisiqdb || true
 
       - name: Wait for SQL Server to start
         run: sleep 30
