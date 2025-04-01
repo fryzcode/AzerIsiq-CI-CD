@@ -3,7 +3,7 @@ name: ASP.NET Core CI/CD
 on:
   push:
     branches:
-      - main  # или другая ветка, на которую пушишь изменения
+      - main
 
 jobs:
   build:
@@ -14,7 +14,7 @@ jobs:
         image: mcr.microsoft.com/mssql/server:2022-latest
         options: >-
           --env ACCEPT_EULA=Y
-          --env SA_PASSWORD=YourStrong!Passw0rd # Используем секрет из GitHub для пароля
+          --env SA_PASSWORD=YourStrong!Passw0rd
           --health-cmd="exit 0"
           --health-interval=5s
           --health-timeout=1s
@@ -30,7 +30,7 @@ jobs:
 
       - name: Build and run containers
         run: |
-          docker-compose -f docker-compose.yml -f docker-compose.override.yml up --build -d  # Используем оба файла для сборки
+          docker-compose -f docker-compose.yml -f docker-compose.override.yml up --build -d
 
       - name: Wait for SQL Server to start
         run: |
