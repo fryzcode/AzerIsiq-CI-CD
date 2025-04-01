@@ -9,8 +9,8 @@ EXPOSE 5253
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["AzerIsiq.csproj", "."]
-RUN dotnet restore "./AzerIsiq.csproj"
+COPY ["AzerIsiq/AzerIsiq.csproj", "AzerIsiq/"]
+RUN dotnet restore "./AzerIsiq/AzerIsiq.csproj"
 COPY . .
 WORKDIR "/src/AzerIsiq"
 RUN dotnet build "./AzerIsiq.csproj" -c $BUILD_CONFIGURATION -o /app/build
