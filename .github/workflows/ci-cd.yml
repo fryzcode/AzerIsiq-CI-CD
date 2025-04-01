@@ -1,0 +1,51 @@
+name: ASP.NET Core CI/CD
+
+on:
+  push:
+    branches:
+      - main  # или другая ветка, на которую пушишь изменения
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mssql:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        options: >-
+          --env ACCEPT_EULA=Y
+          --env SA_PASSWORD=${{ secrets.MSSQL_PASSWORD }}
+          --health-cmd="exit 0"
+          --health-interval=5s
+          --health-timeout=1s
+          --health-retries=3
+          -p 1433:1433
+          
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build and run containers
+        run: |
+          docker-compose -f docker-compose.yml up --build -d
+
+      - name: Wait for SQL Server to start
+        run: |
+          sleep 30  # подожди 30 секунд, чтобы MSSQL запустился (по желанию можно использовать проверку на статус)
+
+      - name: Run unit tests
+        run: |
+          docker exec -t azerisiq.api-1 dotnet test  # Запуск юнит-тестов в контейнере
+
+      - name: Push Docker images to registry (если нужно)
+        run: |
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+          docker-compose push  # или конкретная команда для пуша твоих образов
+
+      - name: Deploy to production (если нужно)
+        run: |
+          # Тут можно добавить команду для деплоя на сервер или в облако, например:
+          # docker-compose -f docker-compose.prod.yml up -d

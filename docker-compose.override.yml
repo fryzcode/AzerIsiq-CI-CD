@@ -1,0 +1,35 @@
+version: '3.4'
+
+services:
+  azerisiqdb:
+    container_name: azerisiqdb
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "YourStrong!Passw0rd"
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+    networks:
+      - azerisiqnetwork
+
+  azerisiq.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - azerisiqdb
+    ports:
+      - "5252:5252"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+    networks:
+      - azerisiqnetwork
+    restart: on-failure
+ 
+
+networks:
+    azerisiqnetwork:
+   
+
+
