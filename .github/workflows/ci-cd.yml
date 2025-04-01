@@ -30,7 +30,7 @@ jobs:
 
       - name: Build and run containers
         run: |
-          docker-compose -f docker-compose.yml -f docker-compose.override.yml up --build -d
+          docker-compose up --build -d
 
       - name: Wait for SQL Server to start
         run: |
