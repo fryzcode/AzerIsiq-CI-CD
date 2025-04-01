@@ -6,7 +6,7 @@ services:
 
   azerisiq.api:
     build:
-      context: ./Azerisiq
+      context: ./AzerIsiq
       dockerfile: Dockerfile
 
 volumes:
