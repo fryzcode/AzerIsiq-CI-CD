@@ -3,7 +3,7 @@ name: ASP.NET Core CI/CD
 on:
   push:
     branches:
-      - main  # или другая ветка, на которую пушишь изменения
+      - main  # или другая ветка, на которую пушишь измененияя
 
 jobs:
   build:
