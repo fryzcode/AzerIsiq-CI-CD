@@ -6,8 +6,8 @@ services:
 
   azerisiq.api:
     build:
-      context: .
-      dockerfile: Azerisiq-main/Dockerfile
+      context: ./Azerisiq
+      dockerfile: Dockerfile
 
 volumes:
   mssql_data:
