@@ -14,7 +14,7 @@ jobs:
         image: mcr.microsoft.com/mssql/server:2022-latest
         options: >-
           --env ACCEPT_EULA=Y
-          --env SA_PASSWORD=${{ secrets.MSSQL_PASSWORD }}  # Используем секрет из GitHub для пароля
+          --env SA_PASSWORD=YourStrong!Passw0rd # Используем секрет из GitHub для пароля
           --health-cmd="exit 0"
           --health-interval=5s
           --health-timeout=1s
@@ -40,10 +40,10 @@ jobs:
         run: |
           docker exec -t azerisiq.api dotnet test  # Запуск юнит-тестов в контейнере
 
-      - name: Push Docker images to registry (если нужно)
-        run: |
-          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-          docker-compose push  # или конкретная команда для пуша твоих образов
+      # - name: Push Docker images to registry (если нужно)
+      #   run: |
+      #     docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      #     docker-compose push  # или конкретная команда для пуша твоих образов
 
       - name: Deploy to production (если нужно)
         run: |
