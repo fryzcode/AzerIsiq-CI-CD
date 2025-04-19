@@ -5,7 +5,7 @@ VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzerIsiq", "AzerIsiq\AzerIsiq.csproj", "{B68ED5B7-A835-43F5-B999-8FDBB5440821}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{7F0D861A-7A53-4CFA-97A1-7A3E5A319A32}"
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{13CC72B7-C468-4ED8-9777-A71AFE325AB4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{B68ED5B7-A835-43F5-B999-8FDBB5440821}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B68ED5B7-A835-43F5-B999-8FDBB5440821}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B68ED5B7-A835-43F5-B999-8FDBB5440821}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7F0D861A-7A53-4CFA-97A1-7A3E5A319A32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7F0D861A-7A53-4CFA-97A1-7A3E5A319A32}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7F0D861A-7A53-4CFA-97A1-7A3E5A319A32}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7F0D861A-7A53-4CFA-97A1-7A3E5A319A32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13CC72B7-C468-4ED8-9777-A71AFE325AB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13CC72B7-C468-4ED8-9777-A71AFE325AB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13CC72B7-C468-4ED8-9777-A71AFE325AB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13CC72B7-C468-4ED8-9777-A71AFE325AB4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

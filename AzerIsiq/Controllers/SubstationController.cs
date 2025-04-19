@@ -9,7 +9,6 @@ namespace AzerIsiq.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-// [Authorize(Roles = "Admin")]
 public class SubstationController : ControllerBase
 {
     private readonly ISubstationService _substationService;
@@ -20,6 +19,7 @@ public class SubstationController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create([FromForm] SubstationDto dto)
     {
         var substation = await _substationService.CreateSubstationAsync(dto);
@@ -49,6 +49,7 @@ public class SubstationController : ControllerBase
     }
     
     [HttpPatch("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit(int id, [FromForm] SubstationDto dto)
     {
         if (dto == null)
@@ -59,9 +60,20 @@ public class SubstationController : ControllerBase
     }
     
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(int id)
     {
         await _substationService.DeleteSubstationAsync(id);
-        return Ok(new { message = "Substation successfully deleted" });
+        return Ok(new { message = "SubstationDto successfully deleted" });
+    }
+    
+    [HttpGet("filtered")]
+    public async Task<IActionResult> GetSubstationsByFilters(
+        [FromQuery] PagedRequestDto request, 
+        [FromQuery] int? regionId, 
+        [FromQuery] int? districtId)
+    {
+        var result = await _substationService.GetSubstationsByFiltersAsync(request, regionId, districtId);
+        return Ok(result);
     }
 }

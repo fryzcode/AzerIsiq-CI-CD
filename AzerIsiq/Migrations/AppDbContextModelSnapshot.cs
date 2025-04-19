@@ -462,7 +462,11 @@ namespace AzerIsiq.Migrations
 
                     b.Property<string>("IpAddress")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("IsBlocked")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsEmailVerified")
                         .HasColumnType("bit");
@@ -485,7 +489,8 @@ namespace AzerIsiq.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ResetToken")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<DateTime?>("ResetTokenExpiration")
                         .HasColumnType("datetime2");
@@ -655,8 +660,9 @@ namespace AzerIsiq.Migrations
             modelBuilder.Entity("AzerIsiq.Models.Tm", b =>
                 {
                     b.HasOne("AzerIsiq.Models.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId");
+                        .WithMany("Tms")
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("AzerIsiq.Models.Substation", "Substation")
                         .WithMany("Tms")
@@ -698,6 +704,8 @@ namespace AzerIsiq.Migrations
             modelBuilder.Entity("AzerIsiq.Models.Location", b =>
                 {
                     b.Navigation("Substations");
+
+                    b.Navigation("Tms");
                 });
 
             modelBuilder.Entity("AzerIsiq.Models.Region", b =>

@@ -4,6 +4,7 @@ using AzerIsiq.Services;
 using AzerIsiq.Services.ILogic;
 using AzerIsiq.Validators;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AzerIsiq.Controllers;
@@ -32,6 +33,7 @@ public class SubscriberController : ControllerBase
     }
     
     [HttpGet("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetById(int id)
     {
         var sb = await _subscriberService.GetSubscriberByIdAsync(id);
@@ -39,7 +41,8 @@ public class SubscriberController : ControllerBase
     }
     
     [HttpPost("sb-code")]
-    public async Task<IActionResult> CreateSbCode(int id)
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> CreateSbCode([FromQuery] int id)
     {
         await _subscriberService.CreateSubscriberCodeAsync(id);
     
@@ -47,7 +50,8 @@ public class SubscriberController : ControllerBase
     }
     
     [HttpPost("sb-counter")]
-    public async Task<IActionResult> CreateSbCounter(int id, CounterDto dto)
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> CreateSbCounter ([FromQuery] int id, CounterDto dto)
     {
         await _subscriberService.CreateCounterForSubscriberAsync(id, dto);
     
@@ -55,6 +59,7 @@ public class SubscriberController : ControllerBase
     }
     
     [HttpPost("sb-tm")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> ConnectSbToTm(int id, [FromBody] ConnectTmDto dto)
     {
         await _subscriberService.ConnectTmToSubscriberAsync(id, dto.TmId);
@@ -62,7 +67,21 @@ public class SubscriberController : ControllerBase
         return Ok(new { Message = "Success" });
     }
     
+    [HttpPost("sb-apply")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> ApplySubscriberContract(int id)
+    {
+        var (isConfirmed, subscriber) = await _subscriberService.ApplySubscriberContractAsync(id);
+
+        if (isConfirmed)
+        {
+            return Ok(new { Message = "Subscriber is already confirmed"});
+        }
+
+        return Ok(new { Message = "Subscriber successfully confirmed"});
+    }
     [HttpGet("filtered")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetSubscriberByFilters(
         [FromQuery] PagedRequestDto request, [FromQuery] SubscriberFilterDto filter)
     {

@@ -13,9 +13,17 @@ services:
     networks:
       - azerisiqnetwork
 
+  distributedcache:
+    container_name: distributedcache
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - azerisiqnetwork
+
   azerisiq.api:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
     depends_on:
       - azerisiqdb
     ports:
@@ -27,9 +35,38 @@ services:
       - azerisiqnetwork
     restart: on-failure
  
+  prometheus:
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - azerisiqnetwork
+
+  grafana:
+    container_name: grafana
+    ports:
+      - "3001:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - azerisiqnetwork
+
+  elasticsearch:
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - azerisiqnetwork
+
+volumes:
+  mssql_data:
 
 networks:
-    azerisiqnetwork:
-   
+  azerisiqnetwork:
 
 

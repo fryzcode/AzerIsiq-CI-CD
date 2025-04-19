@@ -11,30 +11,22 @@ using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
 using AzerIsiq.Dtos;
+using AzerIsiq.Extensions.BackgroundTasks;
+using AzerIsiq.Extensions.Mapping;
 using AzerIsiq.Extensions.Repository;
 using AzerIsiq.Models;
+using AzerIsiq.Services.Helpers;
 using AzerIsiq.Services.ILogic;
 using AzerIsiq.Validators;
 using Microsoft.AspNetCore.Mvc;
 using AzerIsiq.DbInit;
 
-
-namespace AzerIsiq
+namespace AzerIsiq.Extensions
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddDatabaseConfiguration(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DBInWindowsDocker")));
-
-            return services;
-        }
-
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-
-            services.AddScoped<IDbInitializer, DbInitializer>();
             // Repository
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
@@ -54,6 +46,9 @@ namespace AzerIsiq
             services.AddScoped<IImageRepository, ImageRepository>();
             services.AddScoped<ISubscriberRepository, SubscriberRepository>();
             services.AddScoped<ICounterRepository, CounterRepository>();
+            services.AddScoped<IDbConnectionFactory, SqlConnectionFactory>();
+            services.AddScoped<ILoggerRepository, LoggerRepository>();
+
             
             // Services
             services.AddScoped(typeof(IReadOnlyService<>), typeof(ReadOnlyService<>));
@@ -68,17 +63,26 @@ namespace AzerIsiq
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<ICounterService, CounterService>();
+            services.AddScoped<ISubscriberCodeGenerator, SubscriberCodeGenerator>();
+            services.AddScoped<IUserService, UserService>();
 
             services.AddScoped<IImageService, ImageService>();
-            services.AddScoped<LoggingService>();
+            services.AddScoped<ILoggingService, LoggingService>();
             services.AddScoped<OtpService>();
             services.AddScoped<JwtService>();
+
+            services.AddScoped<IDbInitializer, DbInitializer>();
+
+            services.AddHostedService<FailedAttemptsResetTask>();
             
+            services.AddAutoMapper(typeof(Program));
+
             services.AddHttpContextAccessor();
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             return services;
         }
+
         public static IServiceCollection AddCorsPolicy(this IServiceCollection services)
         {
             services.AddCors(options =>
@@ -93,6 +97,15 @@ namespace AzerIsiq
 
             return services;
         }
+
+        public static IServiceCollection AddDatabaseConfiguration(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("DBConnection")));
+
+            return services;
+        }
+
         public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             var jwtSettings = configuration.GetSection("JwtSettings");

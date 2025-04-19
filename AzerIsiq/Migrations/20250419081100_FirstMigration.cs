@@ -97,12 +97,13 @@ namespace AzerIsiq.Migrations
                     IsEmailVerified = table.Column<bool>(type: "bit", nullable: false),
                     RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RefreshTokenExpiryTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ResetToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ResetToken = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     ResetTokenExpiration = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IpAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IpAddress = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FailedAttempts = table.Column<int>(type: "int", nullable: false),
-                    LastFailedAttempt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    LastFailedAttempt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsBlocked = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -263,7 +264,8 @@ namespace AzerIsiq.Migrations
                         name: "FK_Tms_Locations_LocationId",
                         column: x => x.LocationId,
                         principalTable: "Locations",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Tms_Substations_SubstationId",
                         column: x => x.SubstationId,

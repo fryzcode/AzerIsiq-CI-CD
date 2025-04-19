@@ -81,6 +81,9 @@ public class SubscriberRepository : GenericRepository<Subscriber>, ISubscriberRe
 
         if (dto.CreatedDate.HasValue)
             query = query.Where(s => s.CreatedAt.Date == dto.CreatedDate.Value.Date);
+        
+        if (!dto.CreatedDate.HasValue)
+            query = query.OrderByDescending(s => s.CreatedAt);
 
         var totalCount = await query.CountAsync();
 
@@ -135,5 +138,13 @@ public class SubscriberRepository : GenericRepository<Subscriber>, ISubscriberRe
         while (exists);
 
         return atsCode;
+    }
+    public async Task<bool> ExistsBySubscriberCodeAsync(string subscriberCode)
+    {
+        return await _context.Subscribers.AnyAsync(s => s.SubscriberCode == subscriberCode);
+    }
+    public async Task<bool> ExistsBySubscriberFinAsync(string finCode)
+    {
+        return await _context.Subscribers.AnyAsync(s => s.FinCode == finCode);
     }
 }

@@ -43,17 +43,17 @@ namespace AzerIsiq.DbInit
                 _context.SaveChanges();
             }
 
-            if (!_context.Users.Any(u => u.Email == "admin@azerisiq.com"))
+            if (!_context.Users.Any(u => u.Email == "feryazhajimuradov18@gmail.com"))
             {
                 var admin = new User
                 {
                     UserName = "admin",
-                    Email = "admin@azerisiq.com",
-                    PhoneNumber = "994555555555",
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin123@"),
+                    Email = "feryazhajimuradov18@gmail.com",
+                    PhoneNumber = "994559159999",
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("12345Test@@@@"),
                     IsEmailVerified = true,
                     CreatedAt = DateTime.UtcNow,
-                    IpAddress = "127.0.0.1" 
+                    IpAddress = "127.0.0.1"
                 };
                 _context.Users.Add(admin);
                 _context.SaveChanges();
