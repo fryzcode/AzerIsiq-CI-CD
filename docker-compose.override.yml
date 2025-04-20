@@ -63,6 +63,14 @@ services:
     networks:
       - azerisiqnetwork
 
+  azerisiq.client:
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./azer-ishiq-client/.env
+    networks:
+      - azerisiqnetwork
+
 volumes:
   mssql_data:
 

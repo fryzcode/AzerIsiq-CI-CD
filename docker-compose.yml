@@ -21,6 +21,11 @@ services:
       context: .
       dockerfile: AzerIsiq/Dockerfile
 
+  azerisiq.client:
+    build:
+      context: ./azer-ishiq-client
+      dockerfile: Dockerfile
+
 volumes:
   mssql_data:
   grafana_data:

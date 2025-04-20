@@ -29,7 +29,6 @@ namespace AzerIsiq.DbInit
                 return;
             }
 
-            // Проверяем, существуют ли роли
             if (!_context.Roles.Any())
             {
                 var roles = new List<Role>
@@ -65,7 +64,48 @@ namespace AzerIsiq.DbInit
                     _context.SaveChanges();
                 }
             }
+
+            // Region və District əlavə et
+            if (!_context.Regions.Any())
+            {
+                var regions = new List<Region>
+        {
+            new Region { Name = "Bakı" },
+            new Region { Name = "Gəncə" },
+            new Region { Name = "Sumqayıt" },
+            new Region { Name = "Şəki" },
+            new Region { Name = "Naxçıvan" }
+        };
+
+                _context.Regions.AddRange(regions);
+                _context.SaveChanges();
+            }
+
+            if (!_context.Districts.Any())
+            {
+                var regionDict = _context.Regions.ToDictionary(r => r.Name, r => r.Id);
+
+                var districts = new List<District>
+        {
+            new District { Name = "Binəqədi", RegionId = regionDict["Bakı"] },
+            new District { Name = "Nizami", RegionId = regionDict["Bakı"] },
+            new District { Name = "Yasamal", RegionId = regionDict["Bakı"] },
+
+            new District { Name = "Kəpəz", RegionId = regionDict["Gəncə"] },
+            new District { Name = "Nizami (Gəncə)", RegionId = regionDict["Gəncə"] },
+
+            new District { Name = "Sumqayıt şəhəri", RegionId = regionDict["Sumqayıt"] },
+
+            new District { Name = "Şəki şəhəri", RegionId = regionDict["Şəki"] },
+
+            new District { Name = "Naxçıvan şəhəri", RegionId = regionDict["Naxçıvan"] }
+        };
+
+                _context.Districts.AddRange(districts);
+                _context.SaveChanges();
+            }
         }
+
 
     }
 }
